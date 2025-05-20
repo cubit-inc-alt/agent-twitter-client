@@ -1,72 +1,5 @@
 import { Cookie } from 'tough-cookie';
 import {
-  bearerToken,
-  FetchTransformOptions,
-  requestApi,
-  RequestApiResult,
-} from './api';
-import { TwitterAuth, TwitterAuthOptions, TwitterGuestAuth } from './auth';
-import { TwitterUserAuth } from './auth-user';
-import {
-  getProfile,
-  getUserIdByScreenName,
-  getScreenNameByUserId,
-  Profile,
-} from './profile';
-import {
-  fetchQuotedTweetsPage,
-  fetchSearchProfiles,
-  fetchSearchTweets,
-  SearchMode,
-  searchProfiles,
-  searchQuotedTweets,
-  searchTweets,
-} from './search';
-import {
-  fetchProfileFollowing,
-  fetchProfileFollowers,
-  getFollowing,
-  getFollowers,
-  followUser,
-} from './relationships';
-import { QueryProfilesResponse, QueryTweetsResponse } from './timeline-v1';
-import { getTrends } from './trends';
-import {
-  Tweet,
-  getTweetAnonymous,
-  getTweets,
-  getLatestTweet,
-  getTweetWhere,
-  getTweetsWhere,
-  getTweetsByUserId,
-  TweetQuery,
-  getTweet,
-  fetchListTweets,
-  getTweetsAndRepliesByUserId,
-  getTweetsAndReplies,
-  createCreateTweetRequest,
-  PollData,
-  createCreateTweetRequestV2,
-  getTweetV2,
-  getTweetsV2,
-  defaultOptions,
-  createQuoteTweetRequest,
-  likeTweet,
-  retweet,
-  createCreateNoteTweetRequest,
-  createCreateLongTweetRequest,
-  getArticle,
-  getAllRetweeters,
-  Retweeter,
-} from './tweets';
-import {
-  parseTimelineTweetsV2,
-  TimelineArticle,
-  TimelineV2,
-} from './timeline-v2';
-import { fetchHomeTimeline } from './timeline-home';
-import { fetchFollowingTimeline } from './timeline-following';
-import {
   TTweetv2Expansion,
   TTweetv2MediaField,
   TTweetv2PlaceField,
@@ -75,11 +8,46 @@ import {
   TTweetv2UserField,
 } from 'twitter-api-v2';
 import {
+  bearerToken,
+  FetchTransformOptions,
+  requestApi,
+  RequestApiResult,
+} from './api';
+import { TwitterAuth, TwitterAuthOptions, TwitterGuestAuth } from './auth';
+import { TwitterUserAuth } from './auth-user';
+import {
+  createGrokConversation,
+  grokChat,
+  GrokChatOptions,
+  GrokChatResponse,
+} from './grok';
+import {
   DirectMessagesResponse,
   getDirectMessageConversations,
   sendDirectMessage,
   SendDirectMessageResponse,
 } from './messages';
+import {
+  getProfile,
+  getScreenNameByUserId,
+  getUserIdByScreenName,
+  Profile,
+} from './profile';
+import {
+  fetchProfileFollowers,
+  fetchProfileFollowing,
+  followUser,
+  getFollowers,
+  getFollowing,
+} from './relationships';
+import {
+  fetchQuotedTweetsPage,
+  fetchSearchProfiles,
+  fetchSearchTweets,
+  SearchMode,
+  searchProfiles,
+  searchTweets
+} from './search';
 import {
   fetchAudioSpaceById,
   fetchAuthenticatePeriscope,
@@ -88,6 +56,43 @@ import {
   fetchLiveVideoStreamStatus,
   fetchLoginTwitterToken,
 } from './spaces';
+import { fetchFollowingTimeline } from './timeline-following';
+import { fetchHomeTimeline } from './timeline-home';
+import { QueryProfilesResponse, QueryTweetsResponse } from './timeline-v1';
+import {
+  parseTimelineTweetsV2,
+  TimelineArticle,
+  TimelineV2,
+} from './timeline-v2';
+import { getTrends } from './trends';
+import {
+  createCreateLongTweetRequest,
+  createCreateNoteTweetRequest,
+  createCreateTweetRequest,
+  createCreateTweetRequestV2,
+  createQuoteTweetRequest,
+  defaultOptions,
+  fetchListTweets,
+  getAllRetweeters,
+  getArticle,
+  getLatestTweet,
+  getTweet,
+  getTweetAnonymous,
+  getTweets,
+  getTweetsAndReplies,
+  getTweetsAndRepliesByUserId,
+  getTweetsByUserId,
+  getTweetsV2,
+  getTweetsWhere,
+  getTweetV2,
+  getTweetWhere,
+  likeTweet,
+  PollData,
+  retweet,
+  Retweeter,
+  Tweet,
+  TweetQuery,
+} from './tweets';
 import {
   AudioSpace,
   Community,
@@ -95,12 +100,6 @@ import {
   LoginTwitterTokenResponse,
   Subtopic,
 } from './types/spaces';
-import {
-  createGrokConversation,
-  grokChat,
-  GrokChatOptions,
-  GrokChatResponse,
-} from './grok';
 
 const twUrl = 'https://twitter.com';
 const UserTweetsUrl =
@@ -128,6 +127,10 @@ export class Scraper {
   private auth!: TwitterAuth;
   private authTrends!: TwitterAuth;
   private token: string;
+
+  getAuth(): TwitterAuth{
+    return this.auth;
+  }
 
   /**
    * Creates a new Scraper object.
