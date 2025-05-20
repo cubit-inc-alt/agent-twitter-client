@@ -18,3 +18,4 @@ export { HlsRecordPlugin } from './spaces/plugins/HlsRecordPlugin';
 
 export * from './types/spaces';
 export * from './spaces/types';
+export * from "./api"

@@ -1,8 +1,8 @@
+import { Headers } from 'headers-polyfill';
 import { TwitterAuth } from './auth';
 import { ApiError } from './errors';
 import { Platform, PlatformExtensions } from './platform';
 import { updateCookieJar } from './requests';
-import { Headers } from 'headers-polyfill';
 
 // For some reason using Parameters<typeof fetch> reduces the request transform function to
 // `(url: string) => string` in tests.
@@ -41,7 +41,6 @@ export type RequestApiResult<T> =
 
 /**
  * Used internally to send HTTP requests to the Twitter API.
- * @internal
  * @param url - The URL to send the request to.
  * @param auth - The instance of {@link TwitterAuth} that will be used to authorize this request.
  * @param method - The HTTP method used when sending this request.
@@ -108,7 +107,8 @@ export async function requestApi<T>(
   const transferEncoding = res.headers.get('transfer-encoding');
   if (transferEncoding === 'chunked') {
     // Handle streaming response, if a reader is present
-    const reader = typeof res.body?.getReader === 'function' ? res.body.getReader() : null;
+    const reader =
+      typeof res.body?.getReader === 'function' ? res.body.getReader() : null;
     if (!reader) {
       try {
         const text = await res.text();
