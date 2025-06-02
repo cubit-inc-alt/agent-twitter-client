@@ -1,21 +1,3 @@
-import { addApiFeatures, requestApi } from './api';
-import { TwitterAuth } from './auth';
-import { getUserIdByScreenName } from './profile';
-import { QueryTweetsResponse } from './timeline-v1';
-import {
-  parseTimelineTweetsV2,
-  TimelineV2,
-  TimelineEntryItemContentRaw,
-  parseTimelineEntryItemContentRaw,
-  ThreadedConversation,
-  parseThreadedConversation,
-  parseArticle,
-  TimelineArticle,
-} from './timeline-v2';
-import { getTweetTimeline } from './timeline-async';
-import { apiRequestFactory } from './api-data';
-import { ListTimeline, parseListTimelineTweets } from './timeline-list';
-import { updateCookieJar } from './requests';
 import {
   ApiV2Includes,
   MediaObjectV2,
@@ -30,6 +12,24 @@ import {
   TweetV2,
   UserV2,
 } from 'twitter-api-v2';
+import { addApiFeatures, requestApi } from './api';
+import { apiRequestFactory } from './api-data';
+import { TwitterAuth } from './auth';
+import { getUserIdByScreenName } from './profile';
+import { updateCookieJar } from './requests';
+import { getTweetTimeline } from './timeline-async';
+import { ListTimeline, parseListTimelineTweets } from './timeline-list';
+import { QueryTweetsResponse } from './timeline-v1';
+import {
+  parseArticle,
+  parseThreadedConversation,
+  parseTimelineEntryItemContentRaw,
+  parseTimelineTweetsV2,
+  ThreadedConversation,
+  TimelineArticle,
+  TimelineEntryItemContentRaw,
+  TimelineV2,
+} from './timeline-v2';
 
 export const defaultOptions = {
   expansions: [
@@ -466,7 +466,7 @@ export async function createCreateTweetRequest(
   mediaData?: { data: Buffer; mediaType: string }[],
   hideLinkPreview = false,
 ) {
-  const onboardingTaskUrl = 'https://api.twitter.com/1.1/onboarding/task.json';
+  const onboardingTaskUrl = 'https://api.x.com/1.1/onboarding/task.json';
 
   const cookies = await auth.cookieJar().getCookies(onboardingTaskUrl);
   const xCsrfToken = cookies.find((cookie) => cookie.key === 'ct0');
@@ -517,7 +517,7 @@ export async function createCreateTweetRequest(
   }
 
   const response = await fetch(
-    'https://twitter.com/i/api/graphql/a1p9RWpkYKBjWv_I3WzS-A/CreateTweet',
+    'https://x.com/i/api/graphql/a1p9RWpkYKBjWv_I3WzS-A/CreateTweet',
     {
       headers,
       body: JSON.stringify({
