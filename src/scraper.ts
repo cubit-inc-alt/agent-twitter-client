@@ -793,7 +793,6 @@ export class Scraper {
     this.authTrends.cookieJar().getCookies('https://twitter.com'),
     this.authTrends.cookieJar().getCookies('https://x.com'),
   ]);
-  console.log('Cookies:', cookies);
   return cookies.flat();
   }
 
