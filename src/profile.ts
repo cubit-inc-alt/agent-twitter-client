@@ -21,7 +21,7 @@ export interface LegacyUserRaw {
   id_str?: string;
   listed_count?: number;
   name?: string;
-  location: string;
+  location?: string;
   geo_enabled?: boolean;
   pinned_tweet_ids_str?: string[];
   profile_background_color?: string;
@@ -55,7 +55,7 @@ export interface Profile {
   joined?: Date;
   likesCount?: number;
   listedCount?: number;
-  location: string;
+  location?: string;
   name?: string;
   pinnedTweetIds?: string[];
   tweetsCount?: number;

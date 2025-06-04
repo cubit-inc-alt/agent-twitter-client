@@ -786,11 +786,14 @@ export class Scraper {
    * @returns All cookies for the current session.
    */
   public async getCookies(): Promise<Cookie[]> {
-    return await this.authTrends
-      .cookieJar()
-      .getCookies(
-        typeof document !== 'undefined' ? document.location.toString() : twUrl,
-      );
+    const cookies = await Promise.all([
+    this.authTrends.cookieJar().getCookies(
+      typeof document !== 'undefined' ? document.location.toString() : twUrl,
+    ),
+    this.authTrends.cookieJar().getCookies('https://twitter.com'),
+    this.authTrends.cookieJar().getCookies('https://x.com'),
+  ]);
+  return cookies.flat();
   }
 
   /**
@@ -799,8 +802,17 @@ export class Scraper {
    */
   public async setCookies(cookies: (string | Cookie)[]): Promise<void> {
     const userAuth = new TwitterUserAuth(this.token, this.getAuthOptions());
+
+    const domains = [
+      // typeof document !== 'undefined' ? document.location.origin : twUrl,
+      // 'https://twitter.com',
+      'https://x.com',
+    ];
+
     for (const cookie of cookies) {
-      await userAuth.cookieJar().setCookie(cookie, twUrl);
+      await Promise.all(
+        domains.map((domain) => userAuth.cookieJar().setCookie(cookie, domain)),
+      );
     }
 
     this.auth = userAuth;
