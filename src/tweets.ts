@@ -516,7 +516,7 @@ export async function createCreateTweetRequest(
     variables.reply = { in_reply_to_tweet_id: tweetId };
   }
 
-  const response = await fetch(
+  const response = await auth.fetch(
     'https://x.com/i/api/graphql/a1p9RWpkYKBjWv_I3WzS-A/CreateTweet',
     {
       headers,
