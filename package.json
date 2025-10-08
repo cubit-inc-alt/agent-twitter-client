@@ -37,7 +37,9 @@
     "twitter-api-v2": "^1.18.2",
     "undici": "^7.1.1",
     "undici-types": "^7.2.0",
-    "ws": "^8.18.0"
+    "ws": "^8.18.0",
+    "debug": "^4.4.1",
+    "cycletls": "^2.0.5"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
