@@ -1,3 +1,4 @@
+import { Headers } from 'headers-polyfill';
 import {
   ApiV2Includes,
   MediaObjectV2,
@@ -295,7 +296,7 @@ export async function createCreateTweetRequestV2(
   }
   const { poll, quoted_tweet_id } = options || {};
   let tweetConfig;
-  
+
   if (poll) {
     tweetConfig = {
       text,
@@ -322,7 +323,7 @@ export async function createCreateTweetRequestV2(
       text,
     };
   }
-  
+
   const tweetResponse = await v2client.v2.tweet(tweetConfig);
   let optionsConfig = {};
   if (options?.poll) {
@@ -496,7 +497,7 @@ export async function createCreateTweetRequest(
   };
 
   if (hideLinkPreview) {
-    variables["card_uri"] = "tombstone://card"
+    variables['card_uri'] = 'tombstone://card';
   }
 
   if (mediaData && mediaData.length > 0) {
@@ -517,52 +518,48 @@ export async function createCreateTweetRequest(
   }
 
   const response = await auth.fetch(
-    'https://x.com/i/api/graphql/a1p9RWpkYKBjWv_I3WzS-A/CreateTweet',
+    'https://x.com/i/api/graphql/ZSBCfCefJFumbPcLcwR64Q/CreateTweet',
     {
       headers,
       body: JSON.stringify({
         variables,
+        queryId: 'ZSBCfCefJFumbPcLcwR64Q',
         features: {
-          interactive_text_enabled: true,
-          longform_notetweets_inline_media_enabled: false,
-          responsive_web_text_conversations_enabled: false,
-          tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled:
-            false,
-          vibe_api_enabled: false,
-          rweb_lists_timeline_redesign_enabled: true,
-          responsive_web_graphql_exclude_directive_enabled: true,
-          verified_phone_label_enabled: false,
-          creator_subscriptions_tweet_preview_api_enabled: true,
-          responsive_web_graphql_timeline_navigation_enabled: true,
-          responsive_web_graphql_skip_user_profile_image_extensions_enabled:
-            false,
-          tweetypie_unmention_optimization_enabled: true,
+          premium_content_api_read_enabled: false,
+          communities_web_enable_tweet_community_results_fetch: true,
+          c9s_tweet_anatomy_moderator_badge_enabled: true,
+          responsive_web_grok_analyze_button_fetch_trends_enabled: false,
+          responsive_web_grok_analyze_post_followups_enabled: true,
+          responsive_web_jetfuel_frame: true,
+          responsive_web_grok_share_attachment_enabled: true,
           responsive_web_edit_tweet_api_enabled: true,
           graphql_is_translatable_rweb_tweet_is_translatable_enabled: true,
           view_counts_everywhere_api_enabled: true,
           longform_notetweets_consumption_enabled: true,
+          responsive_web_twitter_article_tweet_consumption_enabled: true,
           tweet_awards_web_tipping_enabled: false,
+          responsive_web_grok_show_grok_translated_post: false,
+          responsive_web_grok_analysis_button_from_backend: true,
+          creator_subscriptions_quote_tweet_preview_enabled: false,
+          longform_notetweets_rich_text_read_enabled: true,
+          longform_notetweets_inline_media_enabled: true,
+          payments_enabled: false,
+          profile_label_improvements_pcf_label_in_post_enabled: true,
+          rweb_tipjar_consumption_enabled: true,
+          verified_phone_label_enabled: false,
+          articles_preview_enabled: true,
+          responsive_web_grok_community_note_auto_translation_is_enabled: false,
+          responsive_web_graphql_skip_user_profile_image_extensions_enabled:
+            false,
           freedom_of_speech_not_reach_fetch_enabled: true,
           standardized_nudges_misinfo: true,
-          longform_notetweets_rich_text_read_enabled: true,
+          tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled:
+            true,
+          responsive_web_grok_image_annotation_enabled: true,
+          responsive_web_grok_imagine_annotation_enabled: true,
+          responsive_web_graphql_timeline_navigation_enabled: true,
           responsive_web_enhance_cards_enabled: false,
-          subscriptions_verification_info_enabled: true,
-          subscriptions_verification_info_reason_enabled: true,
-          subscriptions_verification_info_verified_since_enabled: true,
-          super_follow_badge_privacy_enabled: false,
-          super_follow_exclusive_tweet_notifications_enabled: false,
-          super_follow_tweet_api_enabled: false,
-          super_follow_user_api_enabled: false,
-          android_graphql_skip_api_media_color_palette: false,
-          creator_subscriptions_subscription_count_enabled: false,
-          blue_business_profile_image_shape_enabled: false,
-          unified_cards_ad_metadata_container_dynamic_card_content_query_enabled:
-            false,
-          rweb_video_timestamps_enabled: false,
-          c9s_tweet_anatomy_moderator_badge_enabled: false,
-          responsive_web_twitter_article_tweet_consumption_enabled: false,
         },
-        fieldToggles: {},
       }),
       method: 'POST',
     },
@@ -572,6 +569,7 @@ export async function createCreateTweetRequest(
 
   // check for errors
   if (!response.ok) {
+    console.log(response);
     throw new Error(await response.text());
   }
 
@@ -1059,9 +1057,12 @@ async function uploadMedia(
   } else {
     // Handle image upload
     const form = new FormData();
-    form.append('media', new Blob([mediaData], {
-      type: mediaType,
-    }));
+    form.append(
+      'media',
+      new Blob([mediaData], {
+        type: mediaType,
+      }),
+    );
 
     const response = await fetch(uploadUrl, {
       method: 'POST',
@@ -1538,17 +1539,17 @@ export async function getArticle(
  * All comments must remain in English.
  */
 export async function fetchRetweetersPage(
-    tweetId: string,
-    auth: TwitterAuth,
-    cursor?: string,
-    count = 40,
+  tweetId: string,
+  auth: TwitterAuth,
+  cursor?: string,
+  count = 40,
 ): Promise<{
   retweeters: Retweeter[];
   bottomCursor?: string;
   topCursor?: string;
 }> {
   const baseUrl =
-      'https://twitter.com/i/api/graphql/VSnHXwLGADxxtetlPnO7xg/Retweeters';
+    'https://twitter.com/i/api/graphql/VSnHXwLGADxxtetlPnO7xg/Retweeters';
 
   // Build query parameters
   const variables = {
@@ -1582,7 +1583,8 @@ export async function fetchRetweetersPage(
     creator_subscriptions_quote_tweet_preview_enabled: false,
     freedom_of_speech_not_reach_fetch_enabled: true,
     standardized_nudges_misinfo: true,
-    tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled: true,
+    tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled:
+      true,
     rweb_video_timestamps_enabled: true,
     longform_notetweets_rich_text_read_enabled: true,
     longform_notetweets_inline_media_enabled: true,
@@ -1623,7 +1625,7 @@ export async function fetchRetweetersPage(
 
   const json = await response.json();
   const instructions =
-      json?.data?.retweeters_timeline?.timeline?.instructions || [];
+    json?.data?.retweeters_timeline?.timeline?.instructions || [];
 
   const retweeters: Retweeter[] = [];
   let bottomCursor: string | undefined;
@@ -1648,16 +1650,16 @@ export async function fetchRetweetersPage(
 
         // Capture the bottom cursor
         if (
-            entry.content?.entryType === 'TimelineTimelineCursor' &&
-            entry.content?.cursorType === 'Bottom'
+          entry.content?.entryType === 'TimelineTimelineCursor' &&
+          entry.content?.cursorType === 'Bottom'
         ) {
           bottomCursor = entry.content.value;
         }
 
         // Capture the top cursor
         if (
-            entry.content?.entryType === 'TimelineTimelineCursor' &&
-            entry.content?.cursorType === 'Top'
+          entry.content?.entryType === 'TimelineTimelineCursor' &&
+          entry.content?.cursorType === 'Top'
         ) {
           topCursor = entry.content.value;
         }
@@ -1675,8 +1677,8 @@ export async function fetchRetweetersPage(
  * @returns A list of all users that retweeted the tweet.
  */
 export async function getAllRetweeters(
-    tweetId: string,
-    auth: TwitterAuth
+  tweetId: string,
+  auth: TwitterAuth,
 ): Promise<Retweeter[]> {
   let allRetweeters: Retweeter[] = [];
   let cursor: string | undefined;
@@ -1684,10 +1686,10 @@ export async function getAllRetweeters(
   while (true) {
     // Destructure bottomCursor / topCursor
     const { retweeters, bottomCursor, topCursor } = await fetchRetweetersPage(
-        tweetId,
-        auth,
-        cursor,
-        40
+      tweetId,
+      auth,
+      cursor,
+      40,
     );
     allRetweeters = allRetweeters.concat(retweeters);
 
