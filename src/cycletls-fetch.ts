@@ -1,4 +1,4 @@
-import initCycleTLS from 'cycletls';
+import initCycleTLS, { CycleTLSRequestOptions } from 'cycletls';
 import debug from 'debug';
 import { Headers } from 'headers-polyfill';
 
@@ -36,6 +36,7 @@ export function cycleTLSExit() {
 export async function cycleTLSFetch(
   input: RequestInfo | URL,
   init?: RequestInit,
+  proxy?: string,
 ): Promise<Response> {
   const instance = await initCycleTLSFetch();
 
@@ -78,7 +79,7 @@ export async function cycleTLSFetch(
   }
 
   // Use Chrome 120 JA3 fingerprint for maximum compatibility
-  const options = {
+  const options: CycleTLSRequestOptions = {
     body,
     headers,
     // Chrome 120 on Windows 10
@@ -86,6 +87,7 @@ export async function cycleTLSFetch(
     userAgent:
       headers['user-agent'] ||
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36',
+    proxy,
   };
 
   try {
