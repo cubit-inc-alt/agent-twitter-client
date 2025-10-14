@@ -21,3 +21,5 @@ export * from './spaces/types';
 export * from './types/spaces';
 
 export { cycleTLSExit, cycleTLSFetch } from './cycletls-fetch';
+
+export { Platform } from './platform';

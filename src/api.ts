@@ -51,10 +51,25 @@ export async function requestApi<T>(
   method: 'GET' | 'POST' = 'GET',
   platform: PlatformExtensions = new Platform(),
   body?: any,
+  extraHeaders?: Record<string, string>,
 ): Promise<RequestApiResult<T>> {
   const headers = new Headers();
+
+  if (extraHeaders) {
+    for (const [key, value] of Object.entries(extraHeaders)) {
+      headers.append(key, value);
+    }
+  }
+
   await auth.installTo(headers, url);
   await platform.randomizeCiphers();
+
+  let encodedBody = undefined;
+
+  if (body) {
+    if (typeof body == 'string') encodedBody = body;
+    else encodedBody = JSON.stringify(body);
+  }
 
   let res: Response;
   do {
@@ -63,7 +78,7 @@ export async function requestApi<T>(
         method,
         headers,
         credentials: 'include',
-        ...(body && { body: JSON.stringify(body) }),
+        body: encodedBody,
       });
     } catch (err) {
       if (!(err instanceof Error)) {
@@ -97,6 +112,7 @@ export async function requestApi<T>(
   } while (res.status === 429);
 
   if (!res.ok) {
+    console.log(await res.text())
     return {
       success: false,
       err: await ApiError.fromResponse(res),
