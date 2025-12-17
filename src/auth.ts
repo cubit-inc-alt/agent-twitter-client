@@ -85,7 +85,7 @@ export interface TwitterAuth {
    * authentication token will be updated from the API automatically.
    * @param headers A Headers instance representing a request's headers.
    */
-  installTo(headers: Headers, url: string): Promise<void>;
+  installTo(headers: Headers, url: string, bearerTokenOverride?: string): Promise<void>;
 }
 
 /**

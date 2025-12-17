@@ -13,7 +13,7 @@ import {
   TweetV2,
   UserV2,
 } from 'twitter-api-v2';
-import { addApiFeatures, requestApi } from './api';
+import { addApiFeatures, bearerToken2, requestApi } from './api';
 import { apiRequestFactory } from './api-data';
 import { TwitterAuth } from './auth';
 import { getUserIdByScreenName } from './profile';
@@ -240,6 +240,10 @@ export async function fetchTweets(
   const res = await requestApi<TimelineV2>(
     userTweetsRequest.toRequestUrl(),
     auth,
+    'GET',
+    undefined,
+    undefined,
+    bearerToken2
   );
 
   if (!res.success) {
@@ -272,6 +276,10 @@ export async function fetchTweetsAndReplies(
   const res = await requestApi<TimelineV2>(
     userTweetsRequest.toRequestUrl(),
     auth,
+    'GET',
+    undefined,
+    undefined,
+    bearerToken2
   );
 
   if (!res.success) {
@@ -720,6 +728,10 @@ export async function fetchListTweets(
   const res = await requestApi<ListTimeline>(
     listTweetsRequest.toRequestUrl(),
     auth,
+    'GET',
+    undefined,
+    undefined,
+    bearerToken2
   );
 
   if (!res.success) {
@@ -811,6 +823,10 @@ export async function fetchLikedTweets(
   const res = await requestApi<TimelineV2>(
     userTweetsRequest.toRequestUrl(),
     auth,
+    'GET',
+    undefined,
+    undefined,
+    bearerToken2
   );
 
   if (!res.success) {
@@ -891,6 +907,10 @@ export async function getTweet(
   const res = await requestApi<ThreadedConversation>(
     tweetDetailRequest.toRequestUrl(),
     auth,
+    'GET',
+    undefined,
+    undefined,
+    bearerToken2
   );
 
   if (!res.success) {
@@ -1007,6 +1027,10 @@ export async function getTweetAnonymous(
   const res = await requestApi<TweetResultByRestId>(
     tweetResultByRestIdRequest.toRequestUrl(),
     auth,
+    'GET',
+    undefined,
+    undefined,
+    bearerToken2
   );
 
   if (!res.success) {
@@ -1519,6 +1543,10 @@ export async function getArticle(
   const res = await requestApi<ThreadedConversation>(
     tweetDetailRequest.toRequestUrl(),
     auth,
+    'GET',
+    undefined,
+    undefined,
+    bearerToken2
   );
 
   if (!res.success) {

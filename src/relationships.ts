@@ -1,4 +1,4 @@
-import { addApiFeatures, requestApi, bearerToken } from './api';
+import { addApiFeatures, requestApi, bearerToken, bearerToken2 } from './api';
 import { Headers } from 'headers-polyfill';
 import { TwitterAuth } from './auth';
 import { Profile, getUserIdByScreenName } from './profile';

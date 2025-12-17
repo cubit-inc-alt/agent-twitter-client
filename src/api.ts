@@ -32,6 +32,9 @@ export interface FetchTransformOptions {
 export const bearerToken =
   'AAAAAAAAAAAAAAAAAAAAAFQODgEAAAAAVHTp76lzh3rFzcHbmHVvQxYYpTw%3DckAlMINMjmCwxUcaXbAN4XqJVdgMJaHqNOFgPMK0zN1qLqLQCF';
 
+export const bearerToken2 =
+  'AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA';
+
 /**
  * An API result container.
  */
@@ -51,6 +54,7 @@ export async function requestApi<T>(
   method: 'GET' | 'POST' = 'GET',
   platform: PlatformExtensions = new Platform(),
   body?: any,
+  bearerTokenOverride?: string,
   extraHeaders?: Record<string, string>,
 ): Promise<RequestApiResult<T>> {
   const headers = new Headers();
@@ -61,7 +65,7 @@ export async function requestApi<T>(
     }
   }
 
-  await auth.installTo(headers, url);
+  await auth.installTo(headers, url, bearerTokenOverride);
   await platform.randomizeCiphers();
 
   let encodedBody = undefined;
