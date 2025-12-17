@@ -243,6 +243,7 @@ export async function fetchTweets(
     'GET',
     undefined,
     undefined,
+    undefined,
     bearerToken2
   );
 
@@ -277,6 +278,7 @@ export async function fetchTweetsAndReplies(
     userTweetsRequest.toRequestUrl(),
     auth,
     'GET',
+    undefined,
     undefined,
     undefined,
     bearerToken2
@@ -482,7 +484,8 @@ export async function createCreateTweetRequest(
 
   //@ ts-expect-error - This is a private API.
   const headers = new Headers({
-    authorization: `Bearer ${(auth as any).bearerToken}`,
+    // authorization: `Bearer ${(auth as any).bearerToken}`,
+    authorization: `Bearer ${bearerToken2}`,
     cookie: await auth.cookieJar().getCookieString(onboardingTaskUrl),
     'content-type': 'application/json',
     'User-Agent':
@@ -524,7 +527,7 @@ export async function createCreateTweetRequest(
   if (tweetId) {
     variables.reply = { in_reply_to_tweet_id: tweetId };
   }
-
+  console.log("Creating tweet with variables:", variables);
   const response = await auth.fetch(
     'https://x.com/i/api/graphql/ZSBCfCefJFumbPcLcwR64Q/CreateTweet',
     {
@@ -731,6 +734,7 @@ export async function fetchListTweets(
     'GET',
     undefined,
     undefined,
+    undefined,
     bearerToken2
   );
 
@@ -826,6 +830,7 @@ export async function fetchLikedTweets(
     'GET',
     undefined,
     undefined,
+    undefined,
     bearerToken2
   );
 
@@ -908,6 +913,7 @@ export async function getTweet(
     tweetDetailRequest.toRequestUrl(),
     auth,
     'GET',
+    undefined,
     undefined,
     undefined,
     bearerToken2
@@ -1028,6 +1034,7 @@ export async function getTweetAnonymous(
     tweetResultByRestIdRequest.toRequestUrl(),
     auth,
     'GET',
+    undefined,
     undefined,
     undefined,
     bearerToken2
@@ -1544,6 +1551,7 @@ export async function getArticle(
     tweetDetailRequest.toRequestUrl(),
     auth,
     'GET',
+    undefined,
     undefined,
     undefined,
     bearerToken2

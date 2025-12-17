@@ -85,7 +85,7 @@ export interface TwitterAuth {
    * authentication token will be updated from the API automatically.
    * @param headers A Headers instance representing a request's headers.
    */
-  installTo(headers: Headers, url: string, bearerTokenOverride?: string): Promise<void>;
+  installTo(headers: Headers, _url: string, bearerTokenOverride?: string): Promise<void>;
 }
 
 /**
@@ -189,18 +189,21 @@ export class TwitterGuestAuth implements TwitterAuth {
     return new Date(this.guestCreatedAt);
   }
 
-  async installTo(headers: Headers): Promise<void> {
-    if (this.shouldUpdate()) {
-      await this.updateGuestToken();
-    }
+  async installTo(headers: Headers, _url: string, bearerTokenOverride?: string): Promise<void> {
+    const tokenToUse = bearerTokenOverride ?? this.bearerToken;
 
-    const token = this.guestToken;
-    if (token == null) {
-      throw new Error('Authentication token is null or undefined.');
-    }
+    if (!bearerTokenOverride) {
+      if (this.shouldUpdate()) {
+        await this.updateGuestToken();
+      }
 
-    headers.set('authorization', `Bearer ${this.bearerToken}`);
-    headers.set('x-guest-token', token);
+      if (this.guestToken) {
+          headers.set('x-guest-token', this.guestToken);
+      }
+    }
+    console.log('Using bearer token:', tokenToUse);
+    console.log("-------------------------------------")
+    headers.set('authorization', `Bearer ${tokenToUse}`);
 
     const cookies = await this.getCookies();
     const xCsrfToken = cookies.find((cookie) => cookie.key === 'ct0');

@@ -54,8 +54,8 @@ export async function requestApi<T>(
   method: 'GET' | 'POST' = 'GET',
   platform: PlatformExtensions = new Platform(),
   body?: any,
-  bearerTokenOverride?: string,
   extraHeaders?: Record<string, string>,
+  bearerTokenOverride?: string,
 ): Promise<RequestApiResult<T>> {
   const headers = new Headers();
 
