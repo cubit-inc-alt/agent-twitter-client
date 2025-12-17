@@ -7,7 +7,7 @@ import { requestApi } from './api';
 import { FetchParameters } from './api-types';
 import { TwitterAuthOptions, TwitterGuestAuth } from './auth';
 import { TwitterApiErrorRaw } from './errors';
-import { LegacyUserRaw, parseProfile, type Profile } from './profile';
+import { type Profile } from './profile';
 import { updateCookieJar } from './requests';
 
 interface TwitterUserAuthFlowInitRequest {
@@ -63,20 +63,8 @@ export class TwitterUserAuth extends TwitterGuestAuth {
   }
 
   async isLoggedIn(): Promise<boolean> {
-    const res = await requestApi<TwitterUserAuthVerifyCredentials>(
-      'https://api.x.com/1.1/account/verify_credentials.json',
-      this,
-    );
-    if (!res.success) {
-      return false;
-    }
-
-    const { value: verify } = res;
-    this.userProfile = parseProfile(
-      verify as LegacyUserRaw,
-      (verify as unknown as { verified: boolean }).verified,
-    );
-    return verify && !verify.errors?.length;
+    const cookie = await this.getCookieString();
+    return cookie.includes('ct0=');
   }
 
   async me(): Promise<Profile | undefined> {
@@ -375,12 +363,13 @@ export class TwitterUserAuth extends TwitterGuestAuth {
       ],
     });
   }
-
-  private async handleSuccessSubtask(prev: FlowTokenResultSuccess) {
-    return await this.executeFlowTask({
-      flow_token: prev.flowToken,
-      subtask_inputs: [],
-    });
+  private async handleSuccessSubtask(prev: FlowTokenResultSuccess): Promise<FlowTokenResult> {
+    // Login completed successfully, nothing more to do
+    console.log('Successfully logged in with user credentials.');
+    return {
+      status: 'success',
+      flowToken: prev.flowToken,
+    };
   }
 
   private async executeFlowTask(
