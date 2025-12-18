@@ -483,23 +483,41 @@ export async function createCreateTweetRequest(
   const xCsrfToken = cookies.find((cookie) => cookie.key === 'ct0');
 
   //@ ts-expect-error - This is a private API.
-  const headers = new Headers({
-    // authorization: `Bearer ${(auth as any).bearerToken}`,
+  // const headers = new Headers({
+  //   // authorization: `Bearer ${(auth as any).bearerToken}`,
+  //   authorization: `Bearer ${bearerToken2}`,
+  //   cookie: await auth.cookieJar().getCookieString(onboardingTaskUrl),
+  //   'content-type': 'application/json',
+  //   'User-Agent':
+  //     'Mozilla/5.0 (Linux; Android 11; Nokia G20) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.88 Mobile Safari/537.36',
+  //   // 'x-guest-token': (auth as any).guestToken,
+  //   'x-twitter-auth-type': 'OAuth2Session',
+  //   'x-twitter-active-user': 'yes',
+  //   'x-twitter-client-language': 'en',
+  //   'x-csrf-token': xCsrfToken?.value as string,
+  // });
+
+  const headers = {
     authorization: `Bearer ${bearerToken2}`,
-    cookie: await auth.cookieJar().getCookieString(onboardingTaskUrl),
+    cookie: await auth.cookieJar().getCookieString(onboardingTaskUrl),               // includes auth_token, ct0, twid
     'content-type': 'application/json',
-    'User-Agent':
-      'Mozilla/5.0 (Linux; Android 11; Nokia G20) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.88 Mobile Safari/537.36',
-    'x-guest-token': (auth as any).guestToken,
-    'x-twitter-auth-type': 'OAuth2Client',
+    'user-agent': 'Mozilla/5.0 (Linux; Android 11; Nokia G20) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.88 Mobile Safari/537.36',
+    'x-csrf-token': xCsrfToken?.value as string,
+    'x-twitter-auth-type': 'OAuth2Session',
     'x-twitter-active-user': 'yes',
     'x-twitter-client-language': 'en',
-    'x-csrf-token': xCsrfToken?.value as string,
-  });
+    origin: 'https://x.com',
+    referer: 'https://x.com/compose/post',
+    accept: '*/*',
+    'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
+  };
+  console.log("Creating tweet with headers:", headers);
+
 
   const variables: Record<string, any> = {
     tweet_text: text,
     dark_request: false,
+    disallowed_reply_options: null,
     media: {
       media_entities: [],
       possibly_sensitive: false,
@@ -529,12 +547,12 @@ export async function createCreateTweetRequest(
   }
   console.log("Creating tweet with variables:", variables);
   const response = await auth.fetch(
-    'https://x.com/i/api/graphql/ZSBCfCefJFumbPcLcwR64Q/CreateTweet',
+    'https://x.com/i/api/graphql/Uf3io9zVp1DsYxrmL5FJ7g/CreateTweet',
     {
       headers,
       body: JSON.stringify({
         variables,
-        queryId: 'ZSBCfCefJFumbPcLcwR64Q',
+        queryId: 'Uf3io9zVp1DsYxrmL5FJ7g',
         features: {
           premium_content_api_read_enabled: false,
           communities_web_enable_tweet_community_results_fetch: true,
@@ -554,22 +572,20 @@ export async function createCreateTweetRequest(
           creator_subscriptions_quote_tweet_preview_enabled: false,
           longform_notetweets_rich_text_read_enabled: true,
           longform_notetweets_inline_media_enabled: true,
-          payments_enabled: false,
           profile_label_improvements_pcf_label_in_post_enabled: true,
+          responsive_web_profile_redirect_enabled: false,
           rweb_tipjar_consumption_enabled: true,
           verified_phone_label_enabled: false,
           articles_preview_enabled: true,
           responsive_web_grok_community_note_auto_translation_is_enabled: false,
-          responsive_web_graphql_skip_user_profile_image_extensions_enabled:
-            false,
+          responsive_web_graphql_skip_user_profile_image_extensions_enabled: false,
           freedom_of_speech_not_reach_fetch_enabled: true,
           standardized_nudges_misinfo: true,
-          tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled:
-            true,
+          tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled: true,
           responsive_web_grok_image_annotation_enabled: true,
           responsive_web_grok_imagine_annotation_enabled: true,
           responsive_web_graphql_timeline_navigation_enabled: true,
-          responsive_web_enhance_cards_enabled: false,
+          responsive_web_enhance_cards_enabled: false
         },
       }),
       method: 'POST',
