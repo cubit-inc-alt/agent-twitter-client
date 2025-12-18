@@ -511,7 +511,7 @@ export async function createCreateTweetRequest(
     accept: '*/*',
     'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
   };
-  console.log("Creating tweet with headers:", headers);
+  // console.log("Creating tweet with headers:", headers);
 
 
   const variables: Record<string, any> = {
@@ -545,7 +545,7 @@ export async function createCreateTweetRequest(
   if (tweetId) {
     variables.reply = { in_reply_to_tweet_id: tweetId };
   }
-  console.log("Creating tweet with variables:", variables);
+  // console.log("Creating tweet with variables:", variables);
   const response = await auth.fetch(
     'https://x.com/i/api/graphql/Uf3io9zVp1DsYxrmL5FJ7g/CreateTweet',
     {
